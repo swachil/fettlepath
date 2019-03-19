@@ -24,11 +24,12 @@ public class CommunityActivityComment implements Serializable {
 	private Long id;
 	@Column(length = 500)
 	private String comment;
+	private Long tagged_user_id;
 	private String status;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "people_activity_id")
-	private PeopleActivity people_activity_id;
+	@JoinColumn(name = "community_activity_id")
+	private CommunityActivity community_activity_id;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "commented_user_id")
@@ -54,6 +55,14 @@ public class CommunityActivityComment implements Serializable {
 		this.comment = comment;
 	}
 
+	public Long getTagged_user_id() {
+		return tagged_user_id;
+	}
+
+	public void setTagged_user_id(Long tagged_user_id) {
+		this.tagged_user_id = tagged_user_id;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -62,12 +71,12 @@ public class CommunityActivityComment implements Serializable {
 		this.status = status;
 	}
 
-	public PeopleActivity getPeople_activity_id() {
-		return people_activity_id;
+	public CommunityActivity getCommunity_activity_id() {
+		return community_activity_id;
 	}
 
-	public void setPeople_activity_id(PeopleActivity people_activity_id) {
-		this.people_activity_id = people_activity_id;
+	public void setCommunity_activity_id(CommunityActivity community_activity_id) {
+		this.community_activity_id = community_activity_id;
 	}
 
 	public User getCommented_user_id() {
