@@ -1,234 +1,268 @@
 package com.application.fettlepath.domain;
 
-import com.application.fettlepath.config.Constants;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import javax.validation.constraints.Email;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
-import java.time.Instant;
+
+import com.application.fettlepath.config.Constants;
 
 /**
  * A user.
  */
 @Entity
-@Table(name = "jhi_user")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
-public class User extends AbstractAuditingEntity implements Serializable {
+@Table(name = "user")
+public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long user_id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@NotNull
+	@Pattern(regexp = Constants.LOGIN_REGEX)
+	@Column(length = 50, unique = true, nullable = false)
+	private String username;
 
-    @NotNull
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
-    @Column(length = 50, unique = true, nullable = false)
-    private String login;
+	@NotNull
+	@Column(name = "password", length = 60, nullable = false)
+	private String password;
 
-    @JsonIgnore
-    @NotNull
-    @Size(min = 60, max = 60)
-    @Column(name = "password_hash", length = 60, nullable = false)
-    private String password;
+	@Column(name = "first_name", length = 50)
+	private String firstName;
 
-    @Size(max = 50)
-    @Column(name = "first_name", length = 50)
-    private String firstName;
+	@Column(name = "last_name", length = 50)
+	private String lastName;
 
-    @Size(max = 50)
-    @Column(name = "last_name", length = 50)
-    private String lastName;
+	@Column(length = 254, unique = true)
+	private String email;
 
-    @Email
-    @Size(min = 5, max = 254)
-    @Column(length = 254, unique = true)
-    private String email;
+	private String country;
+	private String postal_code;
+	private Date birth_date;
+	private int gender;
+	private String user_type;
+	private String feth_path_url;
+	private String website_url;
+	private String image_path;
+	@Column(length = 500)
+	private String address;
+	private String city;
+	private String state;
+	private Long company_size;
+	private String industry;
+	private String company_type;
+	private String tagline;
+	private String profile_logo;
+	private short official_agreement;
+	private Timestamp reset_date;
+	private String status;
 
-    @NotNull
-    @Column(nullable = false)
-    private boolean activated = false;
+	public Long getUser_id() {
+		return user_id;
+	}
 
-    @Size(min = 2, max = 6)
-    @Column(name = "lang_key", length = 6)
-    private String langKey;
+	public void setUser_id(Long user_id) {
+		this.user_id = user_id;
+	}
 
-    @Size(max = 256)
-    @Column(name = "image_url", length = 256)
-    private String imageUrl;
+	public String getUsername() {
+		return username;
+	}
 
-    @Size(max = 20)
-    @Column(name = "activation_key", length = 20)
-    @JsonIgnore
-    private String activationKey;
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    @Size(max = 20)
-    @Column(name = "reset_key", length = 20)
-    @JsonIgnore
-    private String resetKey;
+	public String getPassword() {
+		return password;
+	}
 
-    @Column(name = "reset_date")
-    private Instant resetDate = null;
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-        name = "jhi_user_authority",
-        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @BatchSize(size = 20)
-    private Set<Authority> authorities = new HashSet<>();
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public String getLogin() {
-        return login;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    // Lowercase the login before saving it in database
-    public void setLogin(String login) {
-        this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public String getCountry() {
+		return country;
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public void setCountry(String country) {
+		this.country = country;
+	}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public String getPostal_code() {
+		return postal_code;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public void setPostal_code(String postal_code) {
+		this.postal_code = postal_code;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public Date getBirth_date() {
+		return birth_date;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setBirth_date(Date birth_date) {
+		this.birth_date = birth_date;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public int getGender() {
+		return gender;
+	}
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+	public String getUser_type() {
+		return user_type;
+	}
 
-    public boolean getActivated() {
-        return activated;
-    }
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
+	}
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
+	public String getFeth_path_url() {
+		return feth_path_url;
+	}
 
-    public String getActivationKey() {
-        return activationKey;
-    }
+	public void setFeth_path_url(String feth_path_url) {
+		this.feth_path_url = feth_path_url;
+	}
 
-    public void setActivationKey(String activationKey) {
-        this.activationKey = activationKey;
-    }
+	public String getWebsite_url() {
+		return website_url;
+	}
 
-    public String getResetKey() {
-        return resetKey;
-    }
+	public void setWebsite_url(String website_url) {
+		this.website_url = website_url;
+	}
 
-    public void setResetKey(String resetKey) {
-        this.resetKey = resetKey;
-    }
+	public String getImage_path() {
+		return image_path;
+	}
 
-    public Instant getResetDate() {
-        return resetDate;
-    }
+	public void setImage_path(String image_path) {
+		this.image_path = image_path;
+	}
 
-    public void setResetDate(Instant resetDate) {
-        this.resetDate = resetDate;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public String getLangKey() {
-        return langKey;
-    }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    public void setLangKey(String langKey) {
-        this.langKey = langKey;
-    }
+	public String getCity() {
+		return city;
+	}
 
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
+	public void setCity(String city) {
+		this.city = city;
+	}
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
+	public String getState() {
+		return state;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	public void setState(String state) {
+		this.state = state;
+	}
 
-        User user = (User) o;
-        return !(user.getId() == null || getId() == null) && Objects.equals(getId(), user.getId());
-    }
+	public Long getCompany_size() {
+		return company_size;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
+	public void setCompany_size(Long company_size) {
+		this.company_size = company_size;
+	}
 
-    @Override
-    public String toString() {
-        return "User{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated='" + activated + '\'' +
-            ", langKey='" + langKey + '\'' +
-            ", activationKey='" + activationKey + '\'' +
-            "}";
-    }
+	public String getIndustry() {
+		return industry;
+	}
+
+	public void setIndustry(String industry) {
+		this.industry = industry;
+	}
+
+	public String getCompany_type() {
+		return company_type;
+	}
+
+	public void setCompany_type(String company_type) {
+		this.company_type = company_type;
+	}
+
+	public String getTagline() {
+		return tagline;
+	}
+
+	public void setTagline(String tagline) {
+		this.tagline = tagline;
+	}
+
+	public String getProfile_logo() {
+		return profile_logo;
+	}
+
+	public void setProfile_logo(String profile_logo) {
+		this.profile_logo = profile_logo;
+	}
+
+	public short getOfficial_agreement() {
+		return official_agreement;
+	}
+
+	public void setOfficial_agreement(short official_agreement) {
+		this.official_agreement = official_agreement;
+	}
+
+	public Timestamp getReset_date() {
+		return reset_date;
+	}
+
+	public void setReset_date(Timestamp reset_date) {
+		this.reset_date = reset_date;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 }
